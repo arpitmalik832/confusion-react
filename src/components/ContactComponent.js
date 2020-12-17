@@ -24,7 +24,7 @@ class Contact extends Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleBlur = this.handleBlur.bind(this);
+        this.handleFocus = this.handleFocus.bind(this);
     }
 
     handleInputChange(event) {
@@ -42,9 +42,11 @@ class Contact extends Component {
         event.preventDefault();
     }
 
-    handleBlur = (field) => (evt) => {
+    handleFocus = (field) => {
+        const target = field.target;
+        const name = target.name;
         this.setState({
-            touched: { ...this.state.touched, [field]: true }
+            touched: { ...this.state.touched, [name]: true }
         });
     }
 
@@ -67,8 +69,8 @@ class Contact extends Component {
             errors.lastname = "Last Name should be <= 10 characters";
            
         const reg = /^\d+$/;
-        if(this.state.touched.telnum && !reg.text(telnum))
-            errors.telum = "Tel. Number should contain only numbers";
+        if(this.state.touched.telnum && (!reg.test(telnum) || telnum.length < 10 || telnum.length > 10))
+            errors.telnum = "Tel. Number should contain only numbers";
         
         if(this.state.touched.email && email.split('').filter(x => x === '@').length !== 1)
             errors.email = "Email should contain a @ sign";
@@ -130,28 +132,28 @@ class Contact extends Component {
                                 <FormGroup row>
                                     <Label htmlFor="firstname" md={2}>First Name</Label>
                                     <Col md={10}>
-                                        <Input type="text" id="firstname" name="firstname" placeholder="First Name" value={this.state.firstname} onChange={this.handleInputChange} valid={errors.firstname === ''} invalid={errors.firstname !== ''} onBlur={this.handleBlur} />
+                                        <Input type="text" id="firstname" name="firstname" placeholder="First Name" value={this.state.firstname} onChange={this.handleInputChange} valid={errors.firstname === ''} invalid={errors.firstname !== ''} onFocus={this.handleFocus} />
                                         <FormFeedback>{errors.firstname}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Label htmlFor="lastname" md={2}>Last Name</Label>
                                     <Col md={10}>
-                                        <Input type="text" id="lastname" name="lastname" placeholder="Last Name" value={this.state.lastname} onChange={this.handleInputChange} valid={errors.lastname === ''} invalid={errors.lastname !== ''} onBlur={this.handleBlur} />
+                                        <Input type="text" id="lastname" name="lastname" placeholder="Last Name" value={this.state.lastname} onChange={this.handleInputChange} valid={errors.lastname === ''} invalid={errors.lastname !== ''} onFocus={this.handleFocus} />
                                         <FormFeedback>{errors.lastname}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Label htmlFor="telnum" md={2}>Contact Tel.</Label>
                                     <Col md={10}>
-                                        <Input type="tel" id="telnum" name="telnum" placeholder="Tel. Number" value={this.state.telnum} onChange={this.handleInputChange} valid={errors.telnum === ''} invalid={errors.telnum !== ''} onBlur={this.handleBlur} />
+                                        <Input type="tel" id="telnum" name="telnum" placeholder="Tel. Number" value={this.state.telnum} onChange={this.handleInputChange} valid={errors.telnum === ''} invalid={errors.telnum !== ''} onFocus={this.handleFocus} />
                                         <FormFeedback>{errors.telnum}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Label htmlFor="email" md={2}>Email</Label>
                                     <Col md={10}>
-                                        <Input type="email" id="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleInputChange} valid={errors.email === ''} invalid={errors.email !== ''} onBlur={this.handleBlur} />
+                                        <Input type="email" id="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleInputChange} valid={errors.email === ''} invalid={errors.email !== ''} onFocus={this.handleFocus} />
                                         <FormFeedback>{errors.email}</FormFeedback>
                                     </Col>
                                 </FormGroup>
